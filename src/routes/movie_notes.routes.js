@@ -6,7 +6,11 @@ const movie_notesRoutes = Router();
 
 const movie_notesController = new Movie_notesController();
 
-movie_notesRoutes.post('/:user_id', movie_notesController.create);
+const ensureAuthenticated = require('../middlewares/ensureAuthenticated');
+
+movie_notesRoutes.use(ensureAuthenticated);
+
+movie_notesRoutes.post('/', movie_notesController.create);
 
 movie_notesRoutes.get('/:id', movie_notesController.show);
 

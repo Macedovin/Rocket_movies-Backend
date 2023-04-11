@@ -6,7 +6,7 @@ class Movie_notesController {
   async create(request, response) {   
     const { title, description, tags, score } = request.body;
   
-    const { user_id } = request.params;
+    const user_id = request.user.id;
     
     const outsideScoreValueRange = score <= 0 || score > 5;
 
@@ -152,7 +152,9 @@ class Movie_notesController {
   }
 
   async index(request, response) {
-    const { user_id, title, tags } = request.query;
+    const { title, tags } = request.query;
+
+    const user_id = request.user.id;
 
     const titleTrimmed = title.trim();
 

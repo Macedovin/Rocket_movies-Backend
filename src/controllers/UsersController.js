@@ -29,13 +29,15 @@ class UsersController {
   }
 
   async update(request, response) {
-    const { new_name, new_email, new_password, current_password } = request.body;
-
-    const { id } = request.params;
+    const user_id = request.user.id;
     
-    const userInfos = await knex("users").where({ id }).first();
+    const { new_name, new_email, new_password, current_password } = request.body;
+    
+    const userInfos = await knex("users").where({ id: user_id }).first();
     
     let updated_data = { ...userInfos };
+
+    console.log(userInfos)
 
     if (!userInfos) {
   
@@ -49,14 +51,12 @@ class UsersController {
     if (new_email) {
 
       const emailAlreadyExists = await knex("users").where({ email: new_email }).first();  
+
+      console.log(emailAlreadyExists);
       
       if (emailAlreadyExists && emailAlreadyExists.id !== userInfos.id) {
         throw new AppError(" Este email já está em uso. Tente outro.")
       }    
-  
-      if (emailAlreadyExists) {
-        throw new AppError(" Este email já está em uso. Tente outro.")
-      }
         
       updated_data.email = new_email;
     }
@@ -80,7 +80,7 @@ class UsersController {
     }
     
     await knex("users")
-      .where({ id })
+      .where({ id: user_id })
       .update({ 
       name: updated_data.name,
       email: updated_data.email,
