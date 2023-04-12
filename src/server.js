@@ -6,11 +6,15 @@ const AppError = require("./utils/AppError");
 
 const uploadConfig = require('./configs/upload');
 
+const cors = require('cors');
+
 const express = require('express');
+
+const routes = require("./routes");
 
 const app = express();
 
-const routes = require("./routes");
+app.use(cors());
 
 app.use(express.json());
 
