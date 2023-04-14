@@ -37,8 +37,6 @@ class UsersController {
     
     let updated_data = { ...userInfos };
 
-    console.log(userInfos)
-
     if (!userInfos) {
   
       throw new AppError("Usuário não encontrado.");
@@ -51,8 +49,6 @@ class UsersController {
     if (new_email) {
 
       const emailAlreadyExists = await knex("users").where({ email: new_email }).first();  
-
-      console.log(emailAlreadyExists);
       
       if (emailAlreadyExists && emailAlreadyExists.id !== userInfos.id) {
         throw new AppError(" Este email já está em uso. Tente outro.")
@@ -62,7 +58,9 @@ class UsersController {
     }
 
     if(new_password && !current_password) {
+
       throw new AppError("Você precisa informar a senha antiga para definir a nova senha.");
+
     }
 
     if(new_password && current_password) {
@@ -87,9 +85,16 @@ class UsersController {
       password: updated_data.password,
       updated_at: knex.fn.now()
     });
-  
+    
+    const updatedUser = {
+      name: updated_data.name,
+      email: updated_data.email,
+      password: updated_data.password,
+      avatar: updated_data.avatar
+    }
+
     return response.status(201).json({
-      status: 201,
+      updatedUser,
       message: "Os dados foram atualizados com sucesso."
     }); 
 

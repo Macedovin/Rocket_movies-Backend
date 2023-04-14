@@ -9,11 +9,11 @@ class UsersAvatarController {
 
     const user_id = request.user.id;
 
-    const avatarFileName =request.file.filename;
+    const avatarFileName = request.file.filename;
 
     const diskStorage = new DiskStorage();
     
-    const avatarUser = await knex("users").where({ id: user_id}).first();
+    const avatarUser = await knex("users").where({ id: user_id }).first();
 
     if(!avatarUser) {
       throw new AppError("Somente usuários autenticados podem mudar o avatar.", 401)

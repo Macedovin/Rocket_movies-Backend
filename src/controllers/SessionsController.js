@@ -12,6 +12,10 @@ class SessionsController {
   async create(request, response) {
     const { email, password } = request.body;
 
+    if(!email || !password) {
+      throw new AppError("Todos os dados devem ser preenchidos para prosseguir.")
+    } 
+
     const checkedUser = await knex("users").where({ email }).first();
 
     if (!checkedUser) {
@@ -34,7 +38,7 @@ class SessionsController {
         expiresIn
       }
     )
-    return response.json({ checkedUser, token });
+    return response.json({ user: checkedUser, token });
   }
 }
 
