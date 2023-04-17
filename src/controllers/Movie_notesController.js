@@ -14,9 +14,13 @@ class Movie_notesController {
 
     if (outsideScoreValueRange || !isScoreInteger) {
       throw new AppError("A nota deve ser um número inteiro de 1 a 5")
-     }
+    }
+    
+    if(tags.length === 0) {
+      throw new AppError("Você deve adicionar pelo menos um marcador referente a este filme!")
+    }
 
-    const movie_noteId = await knex("movie_notes").insert({
+    const [movie_noteId] = await knex("movie_notes").insert({
       title,
       description,
       score,
